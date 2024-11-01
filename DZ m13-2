@@ -1,0 +1,35 @@
+#"Хендлеры обработки сообщений".
+
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes
+import telegram.ext.filters as filters
+
+TOKEN = '7860918860:AAFm5yZ8sFg2npxqmuMrv2XAE36_1II611w'
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id, text='Привет Я бот помогающий твоему здоровью.')
+    print('Привет Я бот помогающий твоему здоровью.')
+
+async def all_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id, text='Введите команду /start, чтобы начать общение.')
+    print('Введите команду /start, чтобы начать общение.')
+
+def main():
+    application = ApplicationBuilder().token(TOKEN).build()
+
+    start_handler = CommandHandler('start', start)
+    all_messages_handler = MessageHandler(filters.ALL, all_messages)
+
+    application.add_handler(start_handler)
+    application.add_handler(all_messages_handler)
+
+    application.run_polling()
+
+if __name__ == '__main__':
+    main()
+
+
+Вывод:
+Updates were skipped successfully.
+Введите команду /start, чтобы начать общение.
+Привет! Я бот помогающий твоему здоровью.

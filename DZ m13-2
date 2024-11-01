@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes
 import telegram.ext.filters as filters
 
-TOKEN = '7860918860:AAFm5yZ8sFg2npxqmuMrv2XAE36_1II611w'
+TOKEN = ''
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text='Привет Я бот помогающий твоему здоровью.')

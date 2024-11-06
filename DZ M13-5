@@ -7,7 +7,6 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import markdown
 
-# Enable logging
 logging.basicConfig(level=logging.INFO)
 
 
@@ -18,7 +17,6 @@ class UserState(StatesGroup):
 
 
 async def start_cmd(message: types.Message):
-    # Create keyboard
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = [
         ["Рассчитать"],
@@ -63,7 +61,6 @@ async def set_weight(message: types.Message, state: FSMContext):
     await message.answer(f'Норма калорий: {basal_metabolic_rate} ккал в день.',
                          reply_markup=types.ReplyKeyboardRemove())
 
-    # Reset state after calculation is done
     await state.finish()
 
 

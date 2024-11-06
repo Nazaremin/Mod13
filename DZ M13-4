@@ -1,0 +1,85 @@
+Задача "Цепочка вопросов":
+Необходимо сделать цепочку обработки состояний для нахождения нормы калорий для человека.
+
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+
+# Enable logging
+logging.basicConfig(level=logging.INFO)
+
+
+class UserState(StatesGroup):
+    age = State()
+    growth = State()
+    weight = State()
+
+
+async def start_cmd(message: types.Message):
+    await message.answer('Введите свой возраст:')
+    await UserState.age.set()
+
+
+async def set_age(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['age'] = message.text
+    await message.answer('Введите свой рост:')
+    await UserState.next()
+
+
+async def set_growth(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['growth'] = message.text
+    await message.answer('Введите свой вес:')
+    await UserState.next()
+
+
+async def set_weight(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['weight'] = message.text
+
+    # Calculate basal metabolic rate
+    age = int(data.get('age', 0))
+    growth = int(data.get('growth', 0))
+    weight = int(data.get('weight', 0))
+
+    basal_metabolic_rate = 66 + (6.2 * weight) + (12.7 * growth) - (6.76 * age)
+
+    await message.answer(f'Норма калорий: {basal_metabolic_rate} ккал в день.')
+
+  
+    await state.finish()
+
+
+# Основная функция для запуска бота.
+async def main():
+    # Инициализируем бота и диспетчер.
+    bot = Bot(token='7860918860:AAEbL5S3-BFDSZCy-J589ItUDPiCdCWwYng')
+    storage = MemoryStorage()
+
+   
+    dp = Dispatcher(bot, storage=storage)
+
+    # Регистрируем обработчики для каждого состояния.
+
+    dp.register_message_handler(start_cmd, commands=['start'], state=None)
+
+    dp.register_message_handler(set_age, state=UserState.age)
+
+    dp.register_message_handler(set_growth, state=UserState.growth)
+
+    dp.register_message_handler(set_weight, state=UserState.weight)
+
+    # Запускаем асинхронное окружение.
+    try:
+        await dp.start_polling()
+    finally:
+        await bot.session.close()
+
+
+if __name__ == '__main__':
+    import asyncio
+
+    asyncio.run(main())

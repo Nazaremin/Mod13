@@ -7,7 +7,6 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-# Enable logging
 logging.basicConfig(level=logging.INFO)
 
 
@@ -40,7 +39,6 @@ async def set_weight(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['weight'] = message.text
 
-    # Calculate basal metabolic rate
     age = int(data.get('age', 0))
     growth = int(data.get('growth', 0))
     weight = int(data.get('weight', 0))

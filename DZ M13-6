@@ -90,7 +90,7 @@ async def info_cmd(message: types.Message):
 # Основная функция для запуска бота.
 async def main():
     # Инициализируем бота и диспетчер.
-    bot = Bot(token='7860918860:AAEbL5S3-BFDSZCy-J589ItUDPiCdCWwYng')
+    bot = Bot(token='')
     storage = MemoryStorage()
 
     dp = Dispatcher(bot, storage=storage)
